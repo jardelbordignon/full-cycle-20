@@ -1,0 +1,10 @@
+@originId={{get_origin_place.response.body.candidates[0].place_id}}
+@destinationId={{get_destination_place.response.body.candidates[0].place_id}}
+
+# @name get_origin_place
+GET {{host}}/places?text=av flores da cunha 100, carazinho/rs
+###
+
+# @name get_destination_place
+GET {{host}}/places?text=av flores da cunha 4000, carazinho/rs
+###
