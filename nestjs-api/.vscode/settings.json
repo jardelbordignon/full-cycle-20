@@ -1,0 +1,28 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "material-icon-theme.activeIconPack": "nest",
+  "rest-client.environmentVariables": {
+    "development": {
+      "host": "http://localhost:3000",
+      "auth_name": "John Doe",
+      "auth_email": "john-doe@email.com",
+      "auth_password": "Pwd@123"
+    }
+    // "homolog": {
+    //   "host": "https://your-hml-server.com"
+    //   "auth_name": "Homolog User",
+    //   "auth_email": "homolog.user@email.com",
+    //   "auth_password": "Pwd@123"
+    // },
+    // "production": {
+    //   "host": "https://your-prd-server.com"
+    // }
+  }
+}
