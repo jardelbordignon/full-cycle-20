@@ -9,7 +9,11 @@ async function bootstrap() {
 
   await app
     .listen(port)
-    .then(async () => logger.log(`🚀 running on: ${await app.getUrl()}`))
+    .then(async () =>
+      logger.log(
+        `🚀 running on: ${await app.getUrl()} - env: ${process.env.NODE_ENV}`,
+      ),
+    )
     .catch((error) => logger.error(`❌ Server starts error: ${error}`));
 }
 bootstrap();
