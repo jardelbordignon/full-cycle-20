@@ -9,4 +9,6 @@ nest g controller maps/places
 nest g service maps/places   
 
 nest g controller maps/directions
-nest g service maps/directions  
+nest g service maps/directions
+
+nest g resource routes - rest api

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MapsModule } from './maps/maps.module';
+import { RoutesModule } from './routes/routes.module';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { MapsModule } from './maps/maps.module';
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
     }),
     MapsModule,
+    RoutesModule,
   ],
   controllers: [],
   providers: [],
