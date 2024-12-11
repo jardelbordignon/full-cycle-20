@@ -1,0 +1,12 @@
+backend
+
+nest new nestjs-api
+
+cd nestjs-api
+
+nest g module maps
+nest g controller maps/places
+nest g service maps/places   
+
+nest g controller maps/directions
+nest g service maps/directions  

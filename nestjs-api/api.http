@@ -8,3 +8,7 @@ GET {{host}}/places?text=av flores da cunha 100, carazinho/rs
 # @name get_destination_place
 GET {{host}}/places?text=av flores da cunha 4000, carazinho/rs
 ###
+
+# @name get_directions
+GET {{host}}/directions?originId={{originId}}&destinationId={{destinationId}}
+###
