@@ -12,3 +12,35 @@ GET {{host}}/places?text=av flores da cunha 4000, carazinho/rs
 # @name get_directions
 GET {{host}}/directions?originId={{originId}}&destinationId={{destinationId}}
 ###
+
+# @name post_routes
+POST {{host}}/routes
+Content-Type: application/json
+
+{
+  "name": "Rota 01",
+  "originId": "{{originId}}",
+  "destinationId": "{{destinationId}}"
+}
+###
+
+# @name get_routes
+GET {{host}}/routes
+###
+
+# @name get_route
+GET {{host}}/routes/{{get_routes.response.body.0.id}}
+###
+
+# @name update_route
+PATCH {{host}}/routes/{{get_routes.response.body.0.id}}
+Content-Type: application/json
+
+{
+  "name": "Rota 01 alterada"
+}
+###
+
+# @name delete_route
+DELETE {{host}}/routes/{{get_routes.response.body.0.id}}
+###
