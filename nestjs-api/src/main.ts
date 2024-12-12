@@ -11,11 +11,11 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 4000;
   const logger = new Logger('API');
 
   await app
-    .listen(port)
+    .listen(port, '0.0.0.0') // '0.0.0.0': Torna o servidor acessível de fora do container ou da máquina local.
     .then(async () =>
       logger.log(
         `🚀 running on: ${await app.getUrl()} - env: ${process.env.NODE_ENV}`,

@@ -12,3 +12,12 @@ nest g controller maps/directions
 nest g service maps/directions
 
 nest g resource routes - rest api
+
+nest g module prisma
+nest g service prisma
+npx prisma init
+
+
+after docker config
+ - docker compose up
+ - docker compose exec app sh -> npm run start:local

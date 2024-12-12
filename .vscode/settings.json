@@ -10,7 +10,7 @@
   "material-icon-theme.activeIconPack": "nest",
   "rest-client.environmentVariables": {
     "development": {
-      "host": "http://localhost:3000",
+      "host": "http://localhost:4000",
       "auth_name": "John Doe",
       "auth_email": "john-doe@email.com",
       "auth_password": "Pwd@123"
