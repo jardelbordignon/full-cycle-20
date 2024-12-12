@@ -21,3 +21,7 @@ npx prisma init
 after docker config
  - docker compose up
  - docker compose exec app sh -> npm run start:local
+
+docker compose exec app sh -> 
+  nest g service routes/routes-driver
+  npm run start:repl -> await get(RoutesDriverService).processRoute({ route_id: '675ade2e30bbf8c5694e1e8a', lat: 112, lng: 223  })
