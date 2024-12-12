@@ -1,4 +1,32 @@
-export default function NewRoute() {
+import { newRouteFunctions } from "./new-route-functions";
+
+type SearchParams = {
+  searchParams: Promise<{
+    origin: string;
+    destination: string;
+  }>;
+};
+
+export default async function NewRoute({ searchParams }: SearchParams) {
+  const { origin, destination } = await searchParams;
+
+  let directionData = null;
+  let placeOriginId = null;
+  let placeDestinationId = null;
+
+  if (origin && destination) {
+    const { searchDirections } = newRouteFunctions();
+    const result = await searchDirections(origin, destination);
+
+    if (result) {
+      directionData = result.directionsData;
+      placeOriginId = result.placeOriginId;
+      placeDestinationId = result.placeDestinationId;
+    }
+  }
+
+  const leg = directionData ? directionData.routes[0].legs[0] : null;
+
   return (
     <div className="flex flex-1 w-full h-full">
       <div className="w-1/3 p-4 h-full">
@@ -6,14 +34,15 @@ export default function NewRoute() {
         <form className="flex flex-col space-y-4" method="get">
           <div className="relative">
             <input
-              id="source"
-              name="source"
+              id="origin"
+              name="origin"
               type="search"
               placeholder=""
+              defaultValue={origin}
               className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-contrast bg-default border-0 border-b-2 border-contrast appearance-none focus:outline-none focus:ring-0 focus:border-primary peer"
             />
             <label
-              htmlFor="source"
+              htmlFor="origin"
               className="absolute text-contrast duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] start-2.5 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
             >
               Origem
@@ -25,6 +54,7 @@ export default function NewRoute() {
               name="destination"
               type="search"
               placeholder=""
+              defaultValue={destination}
               className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-contrast bg-default border-0 border-b-2 border-contrast appearance-none focus:outline-none focus:ring-0 focus:border-primary peer"
             />
             <label
@@ -42,22 +72,24 @@ export default function NewRoute() {
           </button>
         </form>
 
-        <div className="mt-4 p-4 border rounded text-contrast">
-          <ul>
-            <li className="mb-2">
-              <strong>Origem:</strong>{" "}
-            </li>
-            <li className="mb-2">
-              <strong>Destino:</strong>{" "}
-            </li>
-            <li className="mb-2">
-              <strong>Distância:</strong>{" "}
-            </li>
-            <li className="mb-2">
-              <strong>Duração:</strong>{" "}
-            </li>
-          </ul>
-        </div>
+        {leg && (
+          <div className="mt-4 p-4 border rounded text-contrast">
+            <ul>
+              <li className="mb-2">
+                <strong>Origem:</strong> {leg.start_address}
+              </li>
+              <li className="mb-2">
+                <strong>Destino:</strong> {leg.end_address}
+              </li>
+              <li className="mb-2">
+                <strong>Distância:</strong> {leg.distance.text}
+              </li>
+              <li className="mb-2">
+                <strong>Duração:</strong> {leg.duration.text}
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
