@@ -2,14 +2,14 @@ import { searchDirections } from "./logic/functions";
 import { NewRouteForm } from "./components/new-route-form";
 import { NewRouteMap } from "./components/new-route-map";
 
-type SearchParams = {
+type Props = {
   searchParams: Promise<{
     origin: string;
     destination: string;
   }>;
 };
 
-export default async function NewRoute({ searchParams }: SearchParams) {
+export default async function NewRoute({ searchParams }: Props) {
   const { origin, destination } = await searchParams;
 
   let directionData = null;
