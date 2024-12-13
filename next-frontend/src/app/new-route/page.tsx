@@ -1,5 +1,5 @@
-import { searchDirections } from "./functions";
-import { NewRouteForm } from "./new-route-form";
+import { searchDirections } from "./logic/functions";
+import { NewRouteForm } from "./components/new-route-form";
 
 type SearchParams = {
   searchParams: Promise<{

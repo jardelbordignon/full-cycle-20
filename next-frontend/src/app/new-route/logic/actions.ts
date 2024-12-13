@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchGetDirections, fetchPostRoutes } from "@/services/requests";
-import type { ActionState } from "./new-route-form";
+import type { ActionState } from "../components/new-route-form";
 
 export async function createRouteAction(
   state: ActionState,

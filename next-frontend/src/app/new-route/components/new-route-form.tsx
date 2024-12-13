@@ -1,7 +1,7 @@
 "use client";
 
 import { type PropsWithChildren, useActionState } from "react";
-import { createRouteAction } from "./actions";
+import { createRouteAction } from "../logic/actions";
 
 export type ActionState = {
   error?: string;
