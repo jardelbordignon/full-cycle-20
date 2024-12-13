@@ -30,3 +30,6 @@ docker compose exec app sh ->
 Frontend
 
 npx create-next-app@latest next-frontend
+
+npm i @googlemaps/google-maps-services-js @googlemaps/js-api-loader
+npm i @types/google.maps

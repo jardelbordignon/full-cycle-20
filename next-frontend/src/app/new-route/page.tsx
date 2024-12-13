@@ -1,5 +1,6 @@
 import { searchDirections } from "./logic/functions";
 import { NewRouteForm } from "./components/new-route-form";
+import { NewRouteMap } from "./components/new-route-map";
 
 type SearchParams = {
   searchParams: Promise<{
@@ -105,6 +106,7 @@ export default async function NewRoute({ searchParams }: SearchParams) {
           </div>
         )}
       </div>
+      <NewRouteMap directionsData={directionData} />
     </div>
   );
 }
