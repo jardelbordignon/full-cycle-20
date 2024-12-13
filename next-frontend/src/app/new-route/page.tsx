@@ -1,4 +1,5 @@
-import { newRouteFunctions } from "./new-route-functions";
+import { searchDirections } from "./functions";
+import { NewRouteForm } from "./new-route-form";
 
 type SearchParams = {
   searchParams: Promise<{
@@ -15,7 +16,6 @@ export default async function NewRoute({ searchParams }: SearchParams) {
   let placeDestinationId = null;
 
   if (origin && destination) {
-    const { searchDirections } = newRouteFunctions();
     const result = await searchDirections(origin, destination);
 
     if (result) {
@@ -88,6 +88,20 @@ export default async function NewRoute({ searchParams }: SearchParams) {
                 <strong>Duração:</strong> {leg.duration.text}
               </li>
             </ul>
+            <NewRouteForm>
+              <input type="hidden" name="originId" value={placeOriginId} />
+              <input
+                type="hidden"
+                name="destinationId"
+                value={placeDestinationId}
+              />
+              <button
+                type="submit"
+                className="bg-main text-primary font-bold p-2 rounded mt-4"
+              >
+                Adicionar rota
+              </button>
+            </NewRouteForm>
           </div>
         )}
       </div>
