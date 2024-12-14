@@ -33,3 +33,11 @@ npx create-next-app@latest next-frontend
 
 npm i @googlemaps/google-maps-services-js @googlemaps/js-api-loader
 npm i @types/google.maps
+
+# websocket
+backend
+npm i @nestjs/websockets @nestjs/platform-socket.io
+nest g gateway routes/routes-driver
+
+frontend
+npm i socket.io-client

@@ -4,7 +4,7 @@ import type { RouteModel } from "@/utils/models";
 
 type Props = {
   searchParams: Promise<{
-    routeId: string;
+    routeId: string | null;
   }>;
 };
 
@@ -21,7 +21,7 @@ export default async function Driver({ searchParams }: Props) {
         <div className="flex flex-col">
           <form className="flex flex-col space-y-4" method="get">
             <select
-              name="route_id"
+              name="routeId"
               className="mb-2 p-2 border rounded bg-default text-contrast"
             >
               {routes.map((route: RouteModel) => (
@@ -39,7 +39,7 @@ export default async function Driver({ searchParams }: Props) {
           </form>
         </div>
       </div>
-      <DriverMap />
+      <DriverMap routeId={routeId} />
     </div>
   );
 }
