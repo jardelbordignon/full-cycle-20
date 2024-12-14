@@ -1,6 +1,16 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: (requestOrigin, callback) => {
+      if (process.env.CORS_ORIGIN?.split(',').includes(requestOrigin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Request not allowed by CORS'));
+      }
+    },
+  },
+})
 export class RoutesDriverGateway {
   @SubscribeMessage('message')
   handleMessage(client: any, payload: any): string {

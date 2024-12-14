@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 
-const apiHost = "http://localhost:4000";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 type PostRoutesPayload = {
   name: string;
@@ -9,7 +9,7 @@ type PostRoutesPayload = {
 };
 
 export async function fetchPostRoutes(payload: PostRoutesPayload) {
-  return fetch(`${apiHost}/routes`, {
+  return fetch(`${apiUrl}/routes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export async function fetchPostRoutes(payload: PostRoutesPayload) {
 }
 
 export async function fetchGetRoutes() {
-  return fetch(`${apiHost}/routes`, {
+  return fetch(`${apiUrl}/routes`, {
     cache: "force-cache",
     next: {
       // revalidate: 60 * 60 * 24, // 1 dia
@@ -32,7 +32,7 @@ export async function fetchGetRoutes() {
 }
 
 export async function fetchGetPlaces(text: string) {
-  return fetch(`${apiHost}/places?text=${text}`, {
+  return fetch(`${apiUrl}/places?text=${text}`, {
     // cache: "force-cache",
     // next: {
     //   revalidate: 60 * 60 * 24, // 1 dia
@@ -45,7 +45,7 @@ export async function fetchGetDirections(
   destinationId: string
 ) {
   return fetch(
-    `${apiHost}/directions?originId=${originId}&destinationId=${destinationId}`,
+    `${apiUrl}/directions?originId=${originId}&destinationId=${destinationId}`,
     {
       // cache: "force-cache",
       // next: {

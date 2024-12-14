@@ -7,15 +7,17 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
+  const logger = new Logger('API');
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
-  const port = process.env.PORT || 4000;
-  const logger = new Logger('API');
+
+  app.enableCors({ origin: process.env.CORS_ORIGIN });
 
   await app
-    .listen(port, '0.0.0.0') // '0.0.0.0': Torna o servidor acessível de fora do container ou da máquina local.
+    .listen(process.env.PORT!, '0.0.0.0') // '0.0.0.0': Torna o servidor acessível de fora do container ou da máquina local.
     .then(async () =>
       logger.log(
         `🚀 running on: ${await app.getUrl()} - env: ${process.env.NODE_ENV}`,
