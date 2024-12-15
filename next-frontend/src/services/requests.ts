@@ -31,6 +31,16 @@ export async function fetchGetRoutes() {
   });
 }
 
+export async function fetchGetRoute(routeId: string) {
+  return fetch(`${apiUrl}/routes/${routeId}`, {
+    cache: "force-cache",
+    next: {
+      // revalidate: 60 * 60 * 24, // 1 dia
+      tags: [`routes-${routeId}`, "routes"], // revalidação por demanda
+    },
+  });
+}
+
 export async function fetchGetPlaces(text: string) {
   return fetch(`${apiUrl}/places?text=${text}`, {
     // cache: "force-cache",

@@ -1,10 +1,10 @@
-import { fetchGetRoutes } from "@/services/requests";
-import { DriverMap } from "./components/driver-map";
+import { fetchGetRoutes, fetchGetRoute } from "@/services/requests";
+import { DriverMap, type LatLng } from "./components/driver-map";
 import type { RouteModel } from "@/utils/models";
 
 type Props = {
   searchParams: Promise<{
-    routeId: string | null;
+    routeId?: string;
   }>;
 };
 
@@ -12,7 +12,18 @@ export default async function Driver({ searchParams }: Props) {
   const { routeId } = await searchParams;
 
   const getRoutesResponse = await fetchGetRoutes();
-  const routes = await getRoutesResponse.json();
+  const routes: RouteModel[] = await getRoutesResponse.json();
+
+  let startLocation: LatLng | undefined;
+  let endLocation: LatLng | undefined;
+
+  if (routeId) {
+    const getRouteResponse = await fetchGetRoute(routeId);
+    const route: RouteModel = await getRouteResponse.json();
+    const { start_location, end_location } = route.directions.routes[0].legs[0];
+    startLocation = start_location;
+    endLocation = end_location;
+  }
 
   return (
     <div className="flex flex-1 w-full h-full">
@@ -39,7 +50,7 @@ export default async function Driver({ searchParams }: Props) {
           </form>
         </div>
       </div>
-      <DriverMap routeId={routeId} />
+      <DriverMap routeId={routeId} startLocation={startLocation} endLocation={endLocation} />
     </div>
   );
 }
