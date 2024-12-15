@@ -14,7 +14,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  app.enableCors({ origin: process.env.CORS_ORIGIN });
+  app.enableCors({ origin: process.env.CORS_ORIGIN?.split(',') });
 
   await app
     .listen(process.env.PORT!, '0.0.0.0') // '0.0.0.0': Torna o servidor acessível de fora do container ou da máquina local.
