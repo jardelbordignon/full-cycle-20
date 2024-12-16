@@ -46,17 +46,19 @@ func (eventHub *EventHub) HandleEvent(message []byte) error {
 		if err != nil {
 			return fmt.Errorf("error unmarshalling route created event: %w", err)
 		}
-
 		return eventHub.handleRouteCreated(event)
+
 	case "DeliveryStarted":
-		break
-	case "DriverMoved":
-		break
+		var event DeliveryStartedEvent
+		err := json.Unmarshal(message, &event)
+		if err != nil {
+			return fmt.Errorf("error unmarshalling route created event: %w", err)
+		}
+		return eventHub.handleDeliveryStarted(event)
+
 	default:
 		return errors.New("unknown event: %s" + baseEvent.EventName)
 	}
-
-	return nil
 }
 
 func (eventHub *EventHub) handleRouteCreated(event RouteCreatedEvent) error {
