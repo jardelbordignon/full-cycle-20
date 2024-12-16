@@ -47,3 +47,5 @@ cd golang-simulator
 go mod init github.com/jardelbordignon/full-cycle-20/simulator // gera o go.mod
 criar arquivo cmd/simulator/main.go que será o entrypoint da aplicação
 go run cmd/simulator/main.go
+
+go mod tidy // instala as dependências
