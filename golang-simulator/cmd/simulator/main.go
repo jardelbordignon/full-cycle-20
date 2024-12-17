@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/jardelbordignon/full-cycle-20/simulator/internal"
 	"github.com/segmentio/kafka-go"
@@ -12,54 +13,64 @@ import (
 )
 
 func main() {
+	mongoUri := getEnv("MONGO_URI", "mongodb://root:root@mongo:27017/routes?authSource=admin&directConnection=true")
+	kafkaBroker := getEnv("KAFKA_BROKER", "kafka:9092")
+	kafkaRouteTopic := getEnv("KAFKA_ROUTE_TOPIC", "route")
+	kafkaFreightTopic := getEnv("KAFKA_FREIGHT_TOPIC", "freight")
+	kafkaSimulationTopic := getEnv("KAFKA_SIMULATION_TOPIC", "simulation")
+	kafkaGroupID := getEnv("KAFKA_GROUP_ID", "route-group")
 
-	mongoUri := "mongodb://root:root@localhost:27017/routes?authSource=admin"
 	mongoConnection, err := mongo.Connect(context.Background(), options.Client().ApplyURI(mongoUri))
 
 	if err != nil {
 		panic(err)
 	}
-
+	
+	// checking mongo connection
+	err = mongoConnection.Ping(context.Background(), nil)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("✅ Connected to MongoDB!")
+	
 	freightService := internal.NewFreightService()
 	routeService := internal.NewRouteService(mongoConnection, freightService)
 	channelDriverMoved := make(chan *internal.DriverMovedEvent)
-	kafkaBroker := "localhost:9092"
 
 	freightWriter := &kafka.Writer{
 		Addr: kafka.TCP(kafkaBroker),
-		Topic: "freight",
+		Topic: kafkaFreightTopic,
 		Balancer: &kafka.LeastBytes{},
 	}
 	
 	simulatorWriter := &kafka.Writer{
 		Addr: kafka.TCP(kafkaBroker),
-		Topic: "simulator",
+		Topic: kafkaSimulationTopic,
 		Balancer: &kafka.LeastBytes{},
 	}
 
-	routerReader := kafka.NewReader(kafka.ReaderConfig{
+	routeReader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{kafkaBroker},
-		Topic: "route",
-		GroupID: "simulator",
+		Topic: kafkaRouteTopic,
+		GroupID: kafkaGroupID,
 	})
 
 	eventHub := internal.NewEventHub(routeService, mongoConnection, channelDriverMoved, freightWriter, simulatorWriter)
 
-	fmt.Println("Starting simulator...")
+	fmt.Println("🚀 Consuming events from 'route' topic...")
+
 	for {
-		message, err := routerReader.ReadMessage(context.Background())
+		message, err := routeReader.ReadMessage(context.Background())
 		if err != nil {
-			log.Printf("error: %v", err)
+			log.Printf("Error reading message: %v\n", err)
 			continue
 		}
 
 		go func(msg []byte) {
-			err = eventHub.HandleEvent(message.Value)
-			if err != nil {
-				log.Printf("error handling event: %v", err)
+			if err := eventHub.HandleEvent(msg); err != nil {
+				log.Printf("Error handling event: %v\n", err)
 			}
 		}(message.Value)
-
 	}
 
 	// routeCreatedEvent := internal.NewRouteCreatedEvent(
@@ -73,4 +84,11 @@ func main() {
 	// )
 
 	// fmt.Println(internal.RouteCreatedHandler(routeCreatedEvent, routeService))
+}
+
+func getEnv(key, fallback string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return fallback
 }

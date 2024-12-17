@@ -29,35 +29,32 @@ func NewEventHub(routeService *RouteService, mongoClient *mongo.Client, channelD
 	}
 }
 
-func (eventHub *EventHub) HandleEvent(message []byte) error {
+func (eventHub *EventHub) HandleEvent(msg []byte) error {
 	var baseEvent struct {
-		EventName string `json: "event"`
+		EventName string `json:"event"`
 	}
 
-	err := json.Unmarshal(message, &baseEvent)
-	if err != nil {
-		return fmt.Errorf("error unmarshalling event: %w", err)
+	if err := json.Unmarshal(msg, &baseEvent); err != nil {
+		return fmt.Errorf("error unmarshalling base event: %w", err)
 	}
 
 	switch baseEvent.EventName {
 	case "RouteCreated":
 		var event RouteCreatedEvent
-		err := json.Unmarshal(message, &event)
-		if err != nil {
-			return fmt.Errorf("error unmarshalling route created event: %w", err)
+		if err := json.Unmarshal(msg, &event); err != nil {
+			return fmt.Errorf("error unmarshalling RouteCreatedEvent: %w", err)
 		}
 		return eventHub.handleRouteCreated(event)
 
 	case "DeliveryStarted":
 		var event DeliveryStartedEvent
-		err := json.Unmarshal(message, &event)
-		if err != nil {
-			return fmt.Errorf("error unmarshalling route created event: %w", err)
+		if err := json.Unmarshal(msg, &event); err != nil {
+			return fmt.Errorf("error unmarshalling DeliveryStartedEvent: %w", err)
 		}
 		return eventHub.handleDeliveryStarted(event)
 
 	default:
-		return errors.New("unknown event: %s" + baseEvent.EventName)
+		return errors.New("unknown event type")
 	}
 }
 
@@ -80,6 +77,8 @@ func (eventHub *EventHub) handleRouteCreated(event RouteCreatedEvent) error {
 		return fmt.Errorf("error writing freight calculated event: %w", err)
 	}
 
+	fmt.Println("🚀 Freight calculated event sent!", freightCalculatedEvent)
+
 	return nil
 }
 
@@ -90,6 +89,9 @@ func (eventHub *EventHub) handleDeliveryStarted(event DeliveryStartedEvent) erro
 	}
 
 	go eventHub.sendDirections()	// goroute - thread leve gerenciada pelo go
+
+	fmt.Println("🚀 Delivery started event sent!", event)
+
 	return nil
 }
 
