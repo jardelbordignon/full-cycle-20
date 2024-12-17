@@ -6,6 +6,7 @@ include:
 
 services:
   simulator:
+    container_name: simulator
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,3 +24,17 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+
+  # simulator_prod:
+  #   container_name: simulator_prod
+  #   build:
+  #     context: .
+  #     target: final
+  #     dockerfile: Dockerfile.prod
+  #   environment:
+  #     - MONGO_URI=mongodb://root:root@mongo:27017/routes?authSource=admin&directConnection=true
+  #     - KAFKA_BROKER=kafka:9092
+  #     - KAFKA_ROUTE_TOPIC=route
+  #     - KAFKA_FREIGHT_TOPIC=freight
+  #     - KAFKA_SIMULATION_TOPIC=simulation
+  #     - KAFKA_GROUP_ID=route-group
